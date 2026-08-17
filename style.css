@@ -172,17 +172,56 @@ body {
 }
 
 .printer-casing {
-    width: 260px;
-    height: 380px;
-    background: var(--printer-main);
-    border-radius: 20px;
-    box-shadow: inset -5px -5px 15px rgba(0,0,0,0.2), 
-                inset 5px 5px 15px rgba(255,255,255,0.5),
-                0 10px 30px rgba(0,0,0,0.9);
+    width: 300px;
+    height: 420px;
+
+    background: #d8d5cc;
+
+    border: 3px solid #111;
+
+    border-radius: 6px;
+
+    box-shadow:
+        8px 8px 0 #111;
+
     position: relative;
+
     display: flex;
     justify-content: center;
+
     z-index: 3;
+}
+
+.printer-casing::before {
+    content: "";
+
+    position: absolute;
+
+    top: 35px;
+    left: 35px;
+
+    width: 40px;
+    height: 8px;
+
+    background: #111;
+
+    border-radius: 2px;
+}
+
+.printer-casing::after {
+    content: "";
+
+    position: absolute;
+
+    bottom: 30px;
+    right: 35px;
+
+    width: 12px;
+    height: 12px;
+
+    border: 2px solid #111;
+
+    border-radius: 50%;
 }
 
 @media (min-width: 768px) {
@@ -191,21 +230,31 @@ body {
 
 .printer-slot-bg {
     position: absolute;
+
     top: 100px;
-    width: 75%;
-    height: 40px;
+
+    width: 78%;
+    height: 35px;
+
     background: #111;
-    border-radius: 4px;
-    box-shadow: inset 0 10px 15px rgba(0,0,0,1);
+
+    border-radius: 2px;
+
+    box-shadow: none;
+
     z-index: 4;
 }
 
 .printer-slot {
     position: absolute;
-    top: 135px;
-    width: 75%;
-    height: 5px;
+
+    top: 130px;
+
+    width: 78%;
+    height: 3px;
+
     background: #000;
+
     z-index: 6;
 }
 
@@ -558,7 +607,7 @@ body {
         margin-bottom: 5vh; margin-top: 5vh;
     }
 
-    .left-text { order: 2; }
+    .left-text { order: 2; margin-top: 5vh;}
 
     .view.active {
         order: 3;
@@ -582,6 +631,9 @@ body {
 }
 #submit-btn {
     margin-top: 7vh;
+}
+.center-message {
+    margin-top: 10vh; margin-bottom: 5vh;
 }
 }
 
