@@ -1,0 +1,718 @@
+/* 
+   Estilos base y reset responsive.
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
+:root {
+    --bg-color: #000000;
+    --text-color: #fefefe;
+    --paper-color: #f0ebd8;
+    --printer-main: #d3d1c8;
+    --printer-dark: #b8b6ad;
+    --printer-shadow: #2a2a2a;
+    --btn-red: #a32a2a;
+    --btn-red-hover: #c43232;
+}
+
+a{
+    color: #fefefe;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.index{
+    overflow-y: hidden;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Special Elite', monospace;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100vw;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.hidden-element { display: none !important; }
+
+/* ============================================================
+   Estructura General y Textos (Responsive por defecto)
+   ============================================================ */
+.view { display: none; width: 100%; height: 100%; }
+.view.active { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    width: 100%;
+    min-height: 100vh;
+    padding: 60px 15px 40px 15px;
+    position: relative;
+}
+
+/* Textos Laterales — en mobile van apilados en el flujo normal (arriba/abajo
+   de la impresora); en desktop se anclan a los costados. */
+.side-text {
+    display: block;
+    position: static;
+    font-size: clamp(1.3rem, 6vw, 1.8rem);
+    line-height: 1.1;
+    font-weight: normal;
+    text-align: center;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: 2px;
+    margin: 6px 0;
+}
+
+@media (min-width: 768px) {
+    .side-text {
+        position: absolute;
+        font-size: 4.3rem;
+        z-index: 1;
+        margin: 0;
+        /* Nota: valores dentro de 0%-100% a propósito. Un bottom negativo
+           empujaba el texto fuera del viewport y generaba scroll extra
+           en pantallas grandes. */
+    }
+    .left-text {
+        top: 50%;
+        left: 20px;
+        transform: translateY(-50%);
+        text-align: left;
+    }
+    .right-text {
+        top: 50%;
+        right: 20px;
+        left: auto;
+        transform: translateY(-50%);
+        text-align: right;
+    }
+}
+
+/* Créditos en la esquina inferior */
+.credits {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    font-family: 'Special Elite', monospace;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    z-index: 10;
+    white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+    .credits {
+        left: 20px;
+        transform: none;
+    }
+}
+
+/* ============================================================
+   Botón Galería
+   ============================================================ */
+.gallery-btn {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-family: 'Special Elite', monospace;
+    font-size: 1.1rem;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+    z-index: 20;
+    letter-spacing: 2px;
+}
+
+@media (min-width: 768px) {
+    .gallery-btn {
+        top: 30px;
+        left: auto;
+        right: 40px;
+        transform: none;
+        font-size: 1.3rem;
+    }
+}
+
+/* ============================================================
+   ESTADO 1: Impresora y Dibujo (Responsive y Escalado Fluido)
+   ============================================================ */
+.printer-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    margin: 20px 0;
+    width: 100%;
+    max-width: 320px;
+    min-height: 600px;
+}
+
+/* Ajuste de escala automático para pantallas muy pequeñas de altura */
+@media (max-height: 700px) {
+    .printer-container {
+        transform: scale(0.85);
+        margin: 0;
+    }
+}
+
+.printer-casing {
+    width: 260px;
+    height: 380px;
+    background: var(--printer-main);
+    border-radius: 20px;
+    box-shadow: inset -5px -5px 15px rgba(0,0,0,0.2), 
+                inset 5px 5px 15px rgba(255,255,255,0.5),
+                0 10px 30px rgba(0,0,0,0.9);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    z-index: 3;
+}
+
+@media (min-width: 768px) {
+    .printer-casing { width: 300px; height: 420px; }
+}
+
+.printer-slot-bg {
+    position: absolute;
+    top: 100px;
+    width: 75%;
+    height: 40px;
+    background: #111;
+    border-radius: 4px;
+    box-shadow: inset 0 10px 15px rgba(0,0,0,1);
+    z-index: 4;
+}
+
+.printer-slot {
+    position: absolute;
+    top: 135px;
+    width: 75%;
+    height: 5px;
+    background: #000;
+    z-index: 6;
+}
+
+.paper {
+    position: absolute;
+    top: 130px;
+    width: 68%;
+    background-color: var(--paper-color);
+    transform-origin: top center;
+    height: 0;
+    overflow: hidden;
+    box-shadow: 0 15px 25px rgba(0,0,0,0.8);
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+.paper.printing { animation: printOut 1.5s forwards cubic-bezier(0.2, 0.8, 0.2, 1); }
+.paper.ready { height: 350px; overflow: visible; }
+.paper.retracting { animation: printIn 1.5s forwards cubic-bezier(0.8, 0.2, 0.8, 1); }
+
+@keyframes printOut { 0% { height: 0; } 100% { height: 350px; } }
+@keyframes printIn { 0% { height: 350px; } 100% { height: 0; } }
+
+.paper-jagged-edge {
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(45deg, transparent 33.333%, var(--paper-color) 33.333%, var(--paper-color) 66.667%, transparent 66.667%), 
+                linear-gradient(-45deg, transparent 33.333%, var(--paper-color) 33.333%, var(--paper-color) 66.667%, transparent 66.667%);
+    background-size: 10px 16px;
+    background-position: 0 -8px;
+}
+
+.canvas-wrap {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* Corrección del bug visual: Altura proporcional exacta para el canvas guía */
+#guide-canvas {
+    width: 100%;
+    height: calc(80 / 350 * 100%);
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.first-piece #guide-canvas { display: none; }
+
+.paper-dashed-line {
+    position: absolute;
+    top: 80px;
+    left: 10%;
+    width: 80%;
+    height: 1px;
+    border-top: 1px dashed rgba(0,0,0,0.4);
+    pointer-events: none;
+}
+
+#draw-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    touch-action: none;
+    z-index: 2;
+}
+
+/* Controles de Borrar y Deshacer alineados debajo del papel */
+.toolbar-inline {
+    position: absolute;
+    top: 490px;
+    width: 68%;
+    display: flex;
+    justify-content: space-between;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    z-index: 10;
+}
+
+.experience.drawing-mode .toolbar-inline,
+.experience.drawing-mode #submit-btn {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.experience.retracting-mode .toolbar-inline,
+.experience.retracting-mode #submit-btn {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.toolbar-inline button {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-family: 'Special Elite', monospace;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    padding: 5px;
+}
+
+#submit-btn {
+    position: absolute;
+    top: 535px;
+    background: var(--btn-red);
+    color: var(--text-color);
+    border: none;
+    font-family: 'Special Elite', monospace;
+    font-size: 1.1rem;
+    padding: 8px 25px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease, background 0.2s;
+    z-index: 10;
+}
+
+#submit-btn:hover:not(:disabled) { background: var(--btn-red-hover); }
+#submit-btn:disabled { opacity: 0.3 !important; cursor: not-allowed; background: #555 !important; }
+
+/* ============================================================
+   ESTADOS CENTRALES (Formulario de Email y Mensajes)
+   ============================================================ */
+.center-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 5;
+    padding: 0 20px;
+    max-width: 450px;
+    animation: fadeIn 1s ease forwards;
+}
+
+.typewriter-text {
+    font-family: 'Special Elite', monospace;
+    font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+    line-height: 1.5;
+    text-underline-offset: 4px;
+    text-decoration-color: rgba(255,255,255,0.5);
+    margin-bottom: 25px;
+}
+
+.email-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.email-form input[type="email"] {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: var(--text-color);
+    font-family: 'Special Elite', monospace;
+    font-size: 1rem;
+    padding: 12px;
+    text-align: center;
+    outline: none;
+}
+
+.email-form input[type="email"]:focus {
+    border-color: var(--text-color);
+}
+
+#submit-email-btn {
+    background: var(--btn-red);
+    color: var(--text-color);
+    border: none;
+    font-family: 'Special Elite', monospace;
+    font-size: 1.1rem;
+    padding: 8px 30px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#submit-email-btn:hover { background: var(--btn-red-hover); }
+
+#skip-email-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    opacity: 0.7;
+    font-family: 'Special Elite', monospace;
+    font-size: 0.8rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    padding: 4px;
+}
+#skip-email-btn:hover { opacity: 1; }
+
+/* ============================================================
+   Mensajes de Estado Flotantes
+   ============================================================ */
+.status-message {
+    position: absolute;
+    bottom: 25px;
+    text-align: center;
+    font-size: 0.85rem;
+    max-width: 90%;
+    min-height: 1.2rem;
+    z-index: 20;
+}
+.status-message.error { color: #e06c6c; }
+.status-message.success { color: #86d98a; }
+.status-message.info { color: #e6c875; }
+
+/* ============================================================
+   Vista Galería y Modal 
+   ============================================================ */
+#view-gallery {
+    padding: 40px 15px;
+    overflow-y: auto;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 15px;
+}
+
+.gallery-header h2 { font-size: clamp(1.2rem, 3vw, 1.8rem); }
+
+.close-gallery-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-family: 'Special Elite', monospace;
+    font-size: 1rem;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 900px;
+    padding-bottom: 40px;
+}
+
+@media (min-width: 600px) {
+    .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 30px; }
+}
+
+.gallery-card {
+    background: var(--paper-color);
+    border: none; 
+    padding: 10px;
+    border-radius: 2px; 
+    cursor: pointer;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.gallery-card:hover { transform: translateY(-5px); }
+.gallery-card img { width: 100%; border-radius: 2px; mix-blend-mode: multiply; }
+.gallery-card span { margin-top: 10px; color: #111; font-size: 0.75rem; font-family: 'Special Elite', monospace; font-weight: bold; }
+.gallery-empty { grid-column: 1 / -1; text-align: center; color: rgba(255,255,255,0.5); font-style: italic; padding: 50px 0; }
+
+.modal {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.95); z-index: 100;
+    display: flex; justify-content: center; align-items: center;
+    padding: 15px;
+}
+.modal.hidden { display: none; }
+.modal-content {
+    position: relative; max-width: 95vw; max-height: 90vh;
+    background: var(--paper-color); padding: 20px; border-radius: 2px;
+}
+.modal-close { 
+    position: absolute; top: -12px; right: -12px; 
+    background: var(--bg-color); width: 35px; height: 35px; border-radius: 50%; 
+    color: var(--text-color); border: 2px solid var(--paper-color);
+    font-family: 'Special Elite', monospace; font-weight: bold; font-size: 1.1rem; cursor: pointer; 
+}
+#modal-image { max-width: 100%; max-height: 65vh; display: block; margin: 0 auto; mix-blend-mode: multiply; }
+#modal-caption { text-align: center; margin-top: 15px; color: #111; font-family: 'Special Elite', monospace; font-weight: bold; font-size: 0.85rem; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   MARQUEE MOBILE
+   ============================================================ */
+/* El marquee queda reemplazado por el texto lateral apilado en mobile (ver
+   bloque ordenado más abajo), así que se oculta siempre. */
+.mobile-marquee { display: none; }
+
+@keyframes marquee {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-100%, 0); }
+}
+
+/* ============================================================
+   LAYOUT MOBILE: todo en flujo normal, apilado y centrado.
+   Evita las superposiciones que generaba posicionar todo con
+   position:absolute sobre la impresora.
+   ============================================================ */
+@media (max-width: 767px) {
+    body {
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        height: auto;
+        min-height: 100dvh;
+        overflow-y: auto;
+        padding: 20px 0 40px;
+    }
+
+    .gallery-btn {
+        position: static;
+        transform: none;
+        order: 1;
+        margin-bottom: 5vh; margin-top: 5vh;
+    }
+
+    .left-text { order: 2; }
+
+    .view.active {
+        order: 3;
+        min-height: 0;
+        padding: 0;
+    }
+
+    .right-text { order: 4; margin-bottom: 5vh; margin-top: 7vh;}
+
+    .credits-link {
+        order: 5;
+        position: static;
+        margin-top: 16px;
+    }
+    .credits-link .credits {
+        position: static;
+        transform: none;
+    }
+    .toolbar-inline {
+    margin-top: 5vh;
+}
+#submit-btn {
+    margin-top: 7vh;
+}
+}
+
+/* ============================================================
+   ESTILOS DE GALERÍA Y CARRUSEL ARRASTRABLE
+   ============================================================ */
+.gallery-body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Special Elite', monospace;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 30px 15px;
+    overflow-x: hidden;
+}
+
+.gallery-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 15px;
+}
+
+.gallery-nav-bar h2 {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    letter-spacing: 2px;
+}
+
+.gallery-main-container {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    padding-bottom: 40px;
+}
+
+/* Carrusel Horizontal Arrastrable en Móvil */
+.gallery-carousel {
+    display: flex;
+    gap: 25px;
+    width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 20px 10px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.gallery-carousel::-webkit-scrollbar {
+    height: 6px;
+}
+.gallery-carousel::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+}
+.gallery-carousel::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.3);
+    border-radius: 3px;
+}
+
+/* En Desktop se transforma en una grilla ordenada */
+@media (min-width: 768px) {
+    .gallery-carousel {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        overflow-x: visible;
+        padding: 0;
+    }
+}
+
+/* Tarjeta Estilo Ticket de Papel */
+.gallery-ticket-card {
+    flex: 0 0 240px;
+    scroll-snap-align: center;
+    background-color: var(--paper-color);
+    padding: 15px 15px 25px 15px;
+    border-radius: 2px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    transition: transform 0.2s ease;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+.gallery-ticket-card:hover {
+    transform: translateY(-5px);
+}
+
+.ticket-image-wrap {
+    width: 100%;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.gallery-ticket-card img {
+    width: 100%;
+    height: auto;
+    mix-blend-mode: multiply;
+    display: block;
+}
+
+.ticket-footer {
+    margin-top: 15px;
+    color: #111;
+    font-size: 0.85rem;
+    font-family: 'Special Elite', monospace;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.gallery-empty {
+    width: 100%;
+    text-align: center;
+    color: rgba(255,255,255,0.5);
+    font-style: italic;
+    padding: 50px 0;
+    grid-column: 1 / -1;
+}

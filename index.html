@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadáver Exquisito</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #fefefe;
+            --btn-red: #a32a2a;
+            --btn-red-hover: #c43232;
+            --line-color: #5c1414;
+            --glow-color: rgba(150, 30, 30, 0.45);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            height: 100%;
+            background: var(--bg-color);
+            overflow: hidden;
+        }
+
+        body {
+            color: var(--text-color);
+            font-family: 'Special Elite', monospace;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 100dvh;
+        }
+
+        a { color: inherit; }
+
+        /* ============================================================
+           Fondo psicodélico: mandala de líneas onduladas concéntricas,
+           rotando a velocidades distintas + respiración + leve viraje
+           de tono, para el efecto hipnótico.
+           ============================================================ */
+        .bg-wrap {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: breathe 8s ease-in-out infinite;
+            filter: drop-shadow(0 0 40px var(--glow-color));
+        }
+
+        #psychedelic-bg {
+            width: min(160vw, 160vh);
+            height: min(160vw, 160vh);
+            animation: hueshift 16s ease-in-out infinite;
+        }
+
+        .ring {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation-name: spin;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        .ring-path {
+            fill: none;
+            stroke: var(--line-color);
+            stroke-width: 15;
+            stroke-linejoin: round;
+            stroke-linecap: round;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.045); }
+        }
+
+        @keyframes hueshift {
+            0%, 100% { filter: hue-rotate(0deg) saturate(1); }
+            50% { filter: hue-rotate(10deg) saturate(1.25); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bg-wrap, #psychedelic-bg, .ring { animation: none !important; }
+        }
+
+        /* ============================================================
+           Contenido central
+           ============================================================ */
+        .intro-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 0 24px;
+            max-width: 560px;
+        }
+
+        .quote {
+            font-size: clamp(1rem, 2.6vw, 1.35rem);
+            line-height: 1.6;
+            text-shadow: 0 0 18px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0,0,0,0.6);
+        }
+
+        .quote-author {
+            display: inline-block;
+            margin-top: 6px;
+            opacity: 0.85;
+        }
+
+        .start-btn {
+            display: inline-block;
+            margin-top: 28px;
+            background: var(--btn-red);
+            color: var(--text-color);
+            text-decoration: none;
+            font-family: 'Special Elite', monospace;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            padding: 10px 34px;
+            border-radius: 2px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        .start-btn:hover {
+            background: var(--btn-red-hover);
+            transform: translateY(-2px);
+        }
+
+        /* ============================================================
+           Créditos
+           ============================================================ */
+        .credits-link {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            z-index: 2;
+            text-decoration: none;
+        }
+        .credits {
+            font-size: 0.65rem;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-wrap">
+        <svg id="psychedelic-bg" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+
+    <main class="intro-content">
+        <p class="quote">
+            &ldquo;La poesía debe ser hecha por todos.<br>
+            No por uno.&rdquo;<br>
+            <span class="quote-author">— Lautréamont</span>
+        </p>
+        <a href="inicio.html" class="start-btn">Comenzar</a>
+    </main>
+
+    <a href="https://marianamv.com" target="_blank" class="credits-link">
+        <div class="credits">creado por <span>MARIANA MERCADO</span></div>
+    </a>
+
+    <script>
+        (function () {
+            const svg = document.getElementById('psychedelic-bg');
+            const NS = 'http://www.w3.org/2000/svg';
+            const cx = 500, cy = 500;
+
+            // Cada anillo: radio base, cantidad de "pétalos", amplitud de
+            // la onda grande, amplitud de un segundo temblor más chico
+            // (para que la línea no sea un círculo perfecto sino que se
+            // vea dibujada a mano), y velocidad/dirección de rotación.
+            const rings = [
+                { r: 55,  lobes: 9,  amp: 14, wobble: 4, dur: 70,  dir: 1  },
+                { r: 115, lobes: 9,  amp: 18, wobble: 5, dur: 95,  dir: -1 },
+                { r: 180, lobes: 9,  amp: 22, wobble: 5, dur: 120, dir: 1  },
+                { r: 250, lobes: 10, amp: 25, wobble: 6, dur: 145, dir: -1 },
+                { r: 325, lobes: 10, amp: 29, wobble: 7, dur: 170, dir: 1  },
+                { r: 405, lobes: 10, amp: 33, wobble: 7, dur: 195, dir: -1 },
+                { r: 490, lobes: 11, amp: 37, wobble: 8, dur: 220, dir: 1  },
+                { r: 580, lobes: 11, amp: 41, wobble: 9, dur: 245, dir: -1 }
+            ];
+
+            function buildPath(cfg) {
+                const steps = 260;
+                let d = '';
+                for (let i = 0; i <= steps; i++) {
+                    const t = (i / steps) * Math.PI * 2;
+                    const radius = cfg.r
+                        + cfg.amp * Math.sin(cfg.lobes * t)
+                        + cfg.wobble * Math.sin(37 * t);
+                    const x = cx + radius * Math.cos(t);
+                    const y = cy + radius * Math.sin(t);
+                    d += (i === 0 ? 'M' : 'L') + x.toFixed(2) + ',' + y.toFixed(2) + ' ';
+                }
+                return d + 'Z';
+            }
+
+            rings.forEach((cfg) => {
+                const g = document.createElementNS(NS, 'g');
+                g.setAttribute('class', 'ring');
+                g.style.animationDuration = cfg.dur + 's';
+                g.style.animationDirection = cfg.dir === 1 ? 'normal' : 'reverse';
+
+                const path = document.createElementNS(NS, 'path');
+                path.setAttribute('class', 'ring-path');
+                path.setAttribute('d', buildPath(cfg));
+
+                g.appendChild(path);
+                svg.appendChild(g);
+            });
+        })();
+    </script>
+
+</body>
+</html>

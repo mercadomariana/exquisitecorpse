@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería — Cadáver Exquisito</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+</head>
+<body class="gallery-body">
+
+    <!-- Créditos -->
+    <div class="credits">
+        creado por <span>MARIANA MERCADO</span>
+    </div>
+
+    <!-- Navegación superior -->
+    <div class="gallery-nav-bar">
+        <a href="inicio.html" class="close-gallery-btn">VOLVER | RETURN</a>
+        <h2>GALERÍA | GALLERY</h2>
+    </div>
+
+    <!-- Contenedor del Carrusel (Móvil) / Grilla (Desktop) -->
+    <main class="gallery-main-container">
+        <div id="gallery-carousel" class="gallery-carousel">
+            <p class="gallery-empty">Cargando cadáveres…</p>
+        </div>
+    </main>
+
+    <!-- Modal para ver el cadáver completo en detalle -->
+    <div id="reveal-modal" class="modal hidden">
+        <div class="modal-content">
+            <button id="modal-close" class="modal-close">×</button>
+            <img id="modal-image" src="" alt="Cadáver Completo">
+            <p id="modal-caption"></p>
+        </div>
+    </div>
+
+    <script type="module" src="galeria.js"></script>
+</body>
+</html>

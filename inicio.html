@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es" class="index">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadáver Exquisito</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Textos laterales (Se ocultan en móvil y aparecen en pantallas grandes) -->
+    <div class="side-text left-text">
+        CADA<br>VER<br>EXQ<br>UIS<br>ITO
+    </div>
+    <div class="side-text right-text">
+        EXQ<br>UIS<br>ITE<br>COR<br>PSE
+    </div>
+
+    <!-- Créditos -->
+     <a href="https://marianamv.com" target="_blank" class="credits-link">
+    <div class="credits">
+        creado por <span>MARIANA MERCADO</span>
+    </div>
+    </a>
+
+    <!-- Marquee Móvil (Se oculta en Desktop) -->
+    <div class="mobile-marquee">
+        <div class="marquee-inner">CADA VER EXQUISITO • EXQUISITE CORPSE • CADA VER EXQUISITO • EXQUISITE CORPSE</div>
+    </div>
+
+    <!-- Botón Galería Global -->
+    <!-- Botón Galería Global en index.html -->
+<a href="galeria.html" class="gallery-btn" id="gallery-link">GALERÍA | GALLERY</a>
+
+
+    <!-- Vista Principal: Dibujo y Estados Centrales -->
+    <main class="experience view active" id="view-draw">
+        
+        <!-- Estado 1: Contenedor de la Impresora (Activo por defecto) -->
+        <div class="printer-container" id="state-drawing">
+            <div class="printer-casing">
+                <div class="printer-slot-bg"></div>
+                <div class="printer-slot"></div>
+                
+                <!-- Papel -->
+                <div id="paper" class="paper">
+                    <div id="canvas-wrap" class="canvas-wrap">
+                        <canvas id="guide-canvas"></canvas>
+                        <canvas id="draw-canvas"></canvas>
+                    </div>
+                    <div class="paper-dashed-line"></div>
+                    <div class="paper-jagged-edge"></div>
+                </div>
+            </div>
+
+            <!-- Controles minimalistas -->
+            <div class="toolbar-inline">
+                <button id="clear-btn" title="Borrar todo">BORRAR</button>
+                <div class="spacer"></div>
+                <button id="undo-btn" title="Deshacer trazo">DESHACER</button>
+            </div>
+            
+            <button id="submit-btn" disabled>Enviar</button>
+        </div>
+
+        <!-- Estado 2: Formulario de Email (Aparece tras enviar) -->
+        <div class="center-message hidden-element" id="state-email">
+            <p class="typewriter-text">
+                ¡Gracias! Tu trazo se sumó. Añade<br>
+                tu mail para enterarte cuándo se<br>
+                completará el dibujo
+            </p>
+            <div class="email-form">
+                <input type="email" id="user-email" placeholder="" autocomplete="off">
+                <button id="submit-email-btn">Enviar</button>
+                <button id="skip-email-btn" type="button">No quiero compartir mi correo</button>
+            </div>
+        </div>
+
+        <!-- Estado 3: Mensaje de "Ya participaste" -->
+        <div class="center-message hidden-element" id="state-participated">
+            <p class="typewriter-text">
+                Ya sumaste tu trazo en este<br>
+                cadáver. Espera a que otra<br>
+                persona lo continúe, mientras<br>
+                tanto, puedes mirar la galería.
+            </p>
+        </div>
+
+        <!-- Inputs ocultos requeridos por JS -->
+        <input type="hidden" id="color-picker" value="#000000">
+        <input type="hidden" id="brush-size" value="4">
+        
+        <!-- Indicador de turnos oculto -->
+        <div class="turn-indicator hidden-element">
+            <span id="progress-count">0/2</span>
+            <div id="progress-fill"></div>
+        </div>
+        
+        <!-- Mensajes de status flotantes -->
+        <div id="status-message" class="status-message"></div>
+    </main>
+
+    <!-- Vista: Galería -->
+    <!-- Vista: Galería -->
+    <section class="view" id="view-gallery">
+        <div class="gallery-nav">
+            <button class="tab close-gallery-btn" data-view="draw">VOLVER</button>
+            <h2>GALERÍA</h2>
+        </div>
+        
+        <div class="gallery-container">
+            <div id="gallery-grid" class="gallery-grid">
+                <!-- Los elementos se cargan por JS -->
+            </div>
+        </div>
+
+        <div class="credits">
+            creado por <span>MARIANA MERCADO</span>
+        </div>
+    </section>
+
+    <!-- Modal para revelar el cadáver completo -->
+    <div id="reveal-modal" class="modal hidden">
+        <div class="modal-content">
+            <button id="modal-close" class="modal-close">×</button>
+            <img id="modal-image" src="" alt="Cadáver Completo">
+            <p id="modal-caption"></p>
+        </div>
+    </div>
+
+    
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
