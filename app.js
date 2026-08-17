@@ -159,6 +159,7 @@ let unsubscribe = null;
 let strokes = [];
 let isDrawing = false;
 let lastPoint = null;
+let smoothPoint = null;
 let currentTurnIdx = 0;
 
 // ---------------- elementos de UI ----------------
@@ -377,34 +378,125 @@ function disableCanvas() {
 // ---------------- Lógica de Dibujo ----------------
 els.drawCanvas.addEventListener("pointerdown", (e) => {
   const pos = getPos(e);
+
   if (currentTurnIdx > 0 && pos.y <= GUIDE_HEIGHT) return;
+
   isDrawing = true;
   lastPoint = pos;
+  smoothPoint = pos;
+
+  const size = parseFloat(
+    els.brushSize?.value || 4
+  );
+
+  drawCtx.fillStyle = els.colorPicker
+    ? els.colorPicker.value
+    : "#000000";
+
+  // Punto inicial completamente circular
+  drawCtx.beginPath();
+  drawCtx.arc(
+    pos.x,
+    pos.y,
+    size / 2,
+    0,
+    Math.PI * 2
+  );
+  drawCtx.fill();
+
   saveSnapshot();
 });
 
 els.drawCanvas.addEventListener("pointermove", (e) => {
   if (!isDrawing) return;
+
   const pos = getPos(e);
-  
+
   if (currentTurnIdx > 0 && pos.y <= GUIDE_HEIGHT) {
-      lastPoint = null;
-      return;
-  }
-  if (!lastPoint) {
-      lastPoint = pos;
-      return;
+    lastPoint = null;
+    smoothPoint = null;
+    return;
   }
 
-  drawCtx.strokeStyle = els.colorPicker ? els.colorPicker.value : "#000000";
-  drawCtx.lineWidth = els.brushSize ? els.brushSize.value : 4;
+  if (!lastPoint) {
+    lastPoint = pos;
+    smoothPoint = pos;
+    return;
+  }
+
+  // Suavizado
+  const smoothing = 0.35;
+
+  smoothPoint.x += (pos.x - smoothPoint.x) * smoothing;
+  smoothPoint.y += (pos.y - smoothPoint.y) * smoothing;
+
+  const size = parseFloat(
+    els.brushSize?.value || 4
+  );
+
+  const color = els.colorPicker
+    ? els.colorPicker.value
+    : "#000000";
+
+  drawCtx.strokeStyle = color;
+  drawCtx.fillStyle = color;
+
+  drawCtx.lineWidth = size;
+  drawCtx.lineCap = "round";
+  drawCtx.lineJoin = "round";
+
+  /*
+   * Trazo principal
+   */
   drawCtx.beginPath();
-  drawCtx.moveTo(lastPoint.x, lastPoint.y);
-  drawCtx.lineTo(pos.x, pos.y);
+
+  drawCtx.moveTo(
+    lastPoint.x,
+    lastPoint.y
+  );
+
+  const midX =
+    (lastPoint.x + smoothPoint.x) / 2;
+
+  const midY =
+    (lastPoint.y + smoothPoint.y) / 2;
+
+  drawCtx.quadraticCurveTo(
+    lastPoint.x,
+    lastPoint.y,
+    midX,
+    midY
+  );
+
   drawCtx.stroke();
-  lastPoint = pos;
+
+  /*
+   * Punto circular en el extremo.
+   * Esto garantiza que el pincel tenga
+   * terminación completamente redonda.
+   */
+  drawCtx.beginPath();
+
+  drawCtx.arc(
+    smoothPoint.x,
+    smoothPoint.y,
+    size / 2,
+    0,
+    Math.PI * 2
+  );
+
+  drawCtx.fill();
+
+  lastPoint = {
+    x: smoothPoint.x,
+    y: smoothPoint.y
+  };
 });
-window.addEventListener("pointerup", () => { isDrawing = false; });
+window.addEventListener("pointerup", () => {
+  isDrawing = false;
+  lastPoint = null;
+  smoothPoint = null;
+});
 
 function getPos(e) {
   const rect = els.drawCanvas.getBoundingClientRect();
